@@ -76,4 +76,14 @@ public class SubRegionListTest extends JebirdTest {
 
     }
 
+    @Test
+    public void test_subRegions_serializable() throws ClassNotFoundException, IOException {
+        SubRegionListItem item = new SubRegionListItem();
+        item.setCode("abc");
+        item.setName("123");
+        SubRegionListItem itemFromStream = serialize_deserialize(item);
+        assertEquals("Testing name equivalence", item.getName(), itemFromStream.getName());
+        assertEquals("Testing region code equivalence", item.getCode(), itemFromStream.getCode());
+    }
+
 }

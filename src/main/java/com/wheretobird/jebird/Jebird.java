@@ -16,6 +16,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.wheretobird.jebird.exceptions.EbirdApiException;
 import com.wheretobird.jebird.models.region.SubRegionListItem;
+import com.wheretobird.jebird.models.taxonomy.TaxonomicGroup;
 import com.wheretobird.jebird.models.region.Region;
 
 public final class Jebird {
@@ -148,5 +149,14 @@ public final class Jebird {
         } else {
             return response;
         }
+    }
+
+    private TaxonomicGroup[] getTaxonomicGroups(String speciesGrouping, String groupNameLocale, String apiToken)
+            throws IOException, InterruptedException, EbirdApiException {
+        String path = "/ref/sppgroup/";
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("groupNameLocale", groupNameLocale);
+        return getApiResponse(path, queryParams, apiToken, TaxonomicGroup[].class);
+
     }
 }

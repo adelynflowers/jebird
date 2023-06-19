@@ -14,6 +14,7 @@ import java.net.http.HttpResponse.ResponseInfo;
 import com.google.gson.Gson;
 import com.wheretobird.jebird.exceptions.EbirdApiException;
 import com.wheretobird.jebird.models.region.SubRegionListItem;
+import com.wheretobird.jebird.models.region.Region;
 
 public final class Jebird {
     /**
@@ -115,5 +116,11 @@ public final class Jebird {
             throws IOException, InterruptedException, EbirdApiException {
         String uri = String.format("/ref/region/list/%s/%s", regionType, parentRegionCode);
         return getApiResponse(uri, apiToken, SubRegionListItem[].class);
+    }
+
+    public static Region getRegionInfo(String regionCode, String apiToken)
+            throws IOException, InterruptedException, EbirdApiException {
+        String uri = String.format("/ref/region/info/%s", regionCode);
+        return getApiResponse(uri, apiToken, Region.class);
     }
 }

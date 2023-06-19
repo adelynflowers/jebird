@@ -76,6 +76,10 @@ public class SubRegionListTest extends JebirdTest {
 
     }
 
+    /**
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
     @Test
     public void test_subRegions_serializable() throws ClassNotFoundException, IOException {
         SubRegionListItem item = new SubRegionListItem();

@@ -99,10 +99,12 @@ public final class Jebird {
     private static <T extends Object> T getApiResponse(String path, Map<String, String> queryParams, String token,
             java.lang.Class<T> c) throws IOException, InterruptedException, EbirdApiException {
         if (queryParams.size() > 0) {
-            path += "?";
+            StringBuilder str = new StringBuilder(path);
+            str.append("?");
             for (Map.Entry<String, String> paramEntry : queryParams.entrySet()) {
-                path += String.format("%s=%s", paramEntry.getKey(), paramEntry.getValue());
+                str.append(String.format("%s=%s", paramEntry.getKey(), paramEntry.getValue()));
             }
+            return getApiResponse(str.toString(), token, c);
         }
         return getApiResponse(path, token, c);
     }

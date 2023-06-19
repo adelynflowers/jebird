@@ -10,6 +10,8 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.net.http.HttpResponse.BodySubscriber;
 import java.net.http.HttpResponse.BodySubscribers;
 import java.net.http.HttpResponse.ResponseInfo;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.wheretobird.jebird.exceptions.EbirdApiException;
@@ -94,6 +96,17 @@ public final class Jebird {
 
     }
 
+    private static <T extends Object> T getApiResponse(String path, Map<String, String> queryParams, String token,
+            java.lang.Class<T> c) throws IOException, InterruptedException, EbirdApiException {
+        if (queryParams.size() > 0) {
+            path += "?";
+            for (Map.Entry<String, String> paramEntry : queryParams.entrySet()) {
+                path += String.format("%s=%s", paramEntry.getKey(), paramEntry.getValue());
+            }
+        }
+        return getApiResponse(path, token, c);
+    }
+
     /**
      * Calls the /ref/region/list endpoint, giving information on the
      * subregions within a given region. Returns a list of subregions with the
@@ -118,9 +131,20 @@ public final class Jebird {
         return getApiResponse(uri, apiToken, SubRegionListItem[].class);
     }
 
-    public static Region getRegionInfo(String regionCode, String apiToken)
+    public static Region getRegionInfo(String regionCode, String regionNameFormAt, Character delim, String apiToken)
             throws IOException, InterruptedException, EbirdApiException {
+
         String uri = String.format("/ref/region/info/%s", regionCode);
-        return getApiResponse(uri, apiToken, Region.class);
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("regionNameFormAt", regionNameFormAt);
+        queryParams.put("delim", delim.toString());
+
+        Region response = getApiResponse(uri, queryParams, apiToken, Region.class);
+
+        if (response.getResult() == null) {
+            throw new EbirdApiException("No results returned");
+        } else {
+            return response;
+        }
     }
 }

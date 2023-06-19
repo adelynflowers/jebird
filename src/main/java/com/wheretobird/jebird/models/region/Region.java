@@ -6,6 +6,7 @@ public class Region implements Serializable {
 
     // Region display name
     private String result = null;
+    private RegionBounds bounds = null;
 
     /**
      * Get region name
@@ -26,13 +27,32 @@ public class Region implements Serializable {
     }
 
     /**
+     * Get bounds object
+     * 
+     * @return
+     */
+    public RegionBounds getBounds() {
+        return this.bounds;
+    }
+
+    /**
+     * Set bounds object
+     * 
+     * @param bounds
+     */
+    public void setBounds(RegionBounds bounds) {
+        this.bounds = bounds;
+    }
+
+    /**
      * Empty constructor
      */
     public Region() {
         // Empty constructor for bean
+        this.bounds = new RegionBounds();
     }
 
-    public class RegionBounds implements Serializable {
+    public static class RegionBounds implements Serializable {
         // members representing coordinate bounds
         private float minX;
         private float maxX;
@@ -64,26 +84,56 @@ public class Region implements Serializable {
             return this.maxX;
         }
 
+        /**
+         * Get min Y coordinate
+         * 
+         * @return
+         */
         public float getMinY() {
             return this.minY;
         }
 
+        /**
+         * Set min X coordinate
+         * 
+         * @param minX
+         */
         public void setMinX(float minX) {
             this.minX = minX;
         }
 
+        /**
+         * Set max X coordinate
+         * 
+         * @param maxX
+         */
         public void setMaxX(float maxX) {
             this.maxX = maxX;
         }
 
+        /**
+         * Set min Y coordinate
+         * 
+         * @param minY
+         */
         public void setMinY(float minY) {
             this.minY = minY;
         }
 
+        /**
+         * Get max Y coordinate
+         * 
+         * @return
+         */
         public float getMaxY() {
             return maxY;
         }
 
+        /**
+         * Set max Y coordinate
+         * 
+         * @param maxY
+         */
         public void setMaxY(float maxY) {
             this.maxY = maxY;
         }

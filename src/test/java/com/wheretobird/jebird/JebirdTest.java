@@ -13,7 +13,12 @@ public abstract class JebirdTest {
     protected String apiToken = null;
 
     public JebirdTest() {
-        Dotenv dotenv = Dotenv.load();
-        this.apiToken = dotenv.get("EBIRD_API_KEY");
+        try {
+            Dotenv dotenv = Dotenv.load();
+            this.apiToken = dotenv.get("EBIRD_API_KEY");
+        } catch (Exception e) {
+            System.out.println("Failed to find dotenv file, trying environment instead");
+            this.apiToken = System.getenv("EBIRD_API_KEY");
+        }
     }
 }

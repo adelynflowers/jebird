@@ -131,10 +131,10 @@ public final class Jebird {
      *                              codes
      * @throws EbirdApiException    if the api returns a non-200 status code
      */
-    public static Set<SubRegionListItem> getSubRegions(String regionType, String parentRegionCode, String apiToken)
+    public static Collection<SubRegionListItem> getSubRegions(String regionType, String parentRegionCode, String apiToken)
             throws IOException, InterruptedException, EbirdApiException {
         String uri = String.format("/ref/region/list/%s/%s", regionType, parentRegionCode);
-        TypeToken<Set<SubRegionListItem>> typeToken = new TypeToken<Set<SubRegionListItem>>(){};
+        TypeToken<Collection<SubRegionListItem>> typeToken = new TypeToken<Collection<SubRegionListItem>>(){};
         return getApiResponse(uri, apiToken, typeToken);
     }
 
@@ -155,9 +155,9 @@ public final class Jebird {
         }
     }
 
-    private Collection<TaxonomicGroup> getTaxonomicGroups(String speciesGrouping, String groupNameLocale, String apiToken)
+    public static Collection<TaxonomicGroup> getTaxonomicGroups(String speciesGrouping, String groupNameLocale, String apiToken)
             throws IOException, InterruptedException, EbirdApiException {
-        String path = "/ref/sppgroup/";
+        String path = "/ref/sppgroup/" + speciesGrouping;
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("groupNameLocale", groupNameLocale);
         TypeToken<Collection<TaxonomicGroup>> typeToken = new TypeToken<Collection<TaxonomicGroup>>(){};

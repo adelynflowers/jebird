@@ -1,9 +1,11 @@
 package com.wheretobird.jebird.taxonomy;
 
-public class TaxonomicGroup {
+import java.io.Serializable;
+
+public class TaxonomicGroup implements Serializable{
     private String groupName = null;
     private int groupOrder = -1;
-    private int[] taxonOrderBounds;
+    private int[][] taxonOrderBounds;
 
     public TaxonomicGroup() {
         // Empty constructor for bean
@@ -31,11 +33,11 @@ public class TaxonomicGroup {
         this.groupOrder = groupOrder;
     }
 
-    public int[] getTaxonOrderBounds() {
+    public int[][] getTaxonOrderBounds() {
         return taxonOrderBounds;
     }
 
-    public void setTaxonOrderBounds(int[] taxonOrderBounds) {
+    public void setTaxonOrderBounds(int[][] taxonOrderBounds) {
         this.taxonOrderBounds = taxonOrderBounds;
     }
 

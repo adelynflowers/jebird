@@ -18,9 +18,9 @@ import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wheretobird.jebird.exceptions.EbirdApiException;
-import com.wheretobird.jebird.models.region.SubRegionListItem;
-import com.wheretobird.jebird.models.taxonomy.TaxonomicGroup;
-import com.wheretobird.jebird.models.region.Region;
+import com.wheretobird.jebird.region.Region;
+import com.wheretobird.jebird.region.SubRegionListItem;
+import com.wheretobird.jebird.taxonomy.TaxonomicGroup;
 
 public final class Jebird {
     /**

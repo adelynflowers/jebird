@@ -1,4 +1,4 @@
-package com.wheretobird.jebird.models.region;
+package com.wheretobird.jebird.region;
 
 import java.io.Serializable;
 

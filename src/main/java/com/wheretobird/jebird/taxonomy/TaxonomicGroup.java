@@ -1,4 +1,4 @@
-package com.wheretobird.jebird.models.taxonomy;
+package com.wheretobird.jebird.taxonomy;
 
 public class TaxonomicGroup {
     private String groupName = null;

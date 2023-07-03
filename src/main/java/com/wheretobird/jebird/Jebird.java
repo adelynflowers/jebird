@@ -10,10 +10,16 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.net.http.HttpResponse.BodySubscriber;
 import java.net.http.HttpResponse.BodySubscribers;
 import java.net.http.HttpResponse.ResponseInfo;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wheretobird.jebird.exceptions.EbirdApiException;
-import com.wheretobird.jebird.models.region.SubRegionListItem;
+import com.wheretobird.jebird.region.Region;
+import com.wheretobird.jebird.region.SubRegionListItem;
+import com.wheretobird.jebird.taxonomy.TaxonomicGroup;
 
 public final class Jebird {
     /**
@@ -74,7 +80,7 @@ public final class Jebird {
      *                              codes
      * @throws EbirdApiException    if the api returns a non-200 status code
      */
-    private static <T extends Object> T getApiResponse(String path, String token, java.lang.Class<T> c)
+    private static <T extends Object> T getApiResponse(String path, String token, TypeToken<T> typeToken)
             throws IOException, InterruptedException, EbirdApiException {
         String uri = BASEURL + path;
         HttpClient client = HttpClient.newHttpClient();
@@ -86,11 +92,24 @@ public final class Jebird {
         if (response.statusCode() == 200) {
             String responseBody = response.body();
             Gson gson = new Gson();
-            return gson.fromJson(responseBody, c);
+            return gson.fromJson(responseBody, typeToken);
         } else {
             throw new EbirdApiException(response.body());
         }
 
+    }
+
+    private static <T extends Object> T getApiResponse(String path, Map<String, String> queryParams, String token,
+            TypeToken<T> typeToken) throws IOException, InterruptedException, EbirdApiException {
+        if (queryParams.size() > 0) {
+            StringBuilder str = new StringBuilder(path);
+            str.append("?");
+            for (Map.Entry<String, String> paramEntry : queryParams.entrySet()) {
+                str.append(String.format("%s=%s", paramEntry.getKey(), paramEntry.getValue()));
+            }
+            return getApiResponse(str.toString(), token, typeToken);
+        }
+        return getApiResponse(path, token, typeToken);
     }
 
     /**
@@ -111,9 +130,37 @@ public final class Jebird {
      *                              codes
      * @throws EbirdApiException    if the api returns a non-200 status code
      */
-    public static SubRegionListItem[] getSubRegions(String regionType, String parentRegionCode, String apiToken)
+    public static Collection<SubRegionListItem> getSubRegions(String regionType, String parentRegionCode, String apiToken)
             throws IOException, InterruptedException, EbirdApiException {
         String uri = String.format("/ref/region/list/%s/%s", regionType, parentRegionCode);
-        return getApiResponse(uri, apiToken, SubRegionListItem[].class);
+        TypeToken<Collection<SubRegionListItem>> typeToken = new TypeToken<Collection<SubRegionListItem>>(){};
+        return getApiResponse(uri, apiToken, typeToken);
+    }
+
+    public static Region getRegionInfo(String regionCode, String regionNameFormAt, Character delim, String apiToken)
+            throws IOException, InterruptedException, EbirdApiException {
+
+        String uri = String.format("/ref/region/info/%s", regionCode);
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("regionNameFormAt", regionNameFormAt);
+        queryParams.put("delim", delim.toString());
+        TypeToken<Region> typeToken = new TypeToken<Region>(){};
+        Region response = getApiResponse(uri, queryParams, apiToken, typeToken);
+
+        if (response.getResult() == null) {
+            throw new EbirdApiException("No results returned");
+        } else {
+            return response;
+        }
+    }
+
+    public static Collection<TaxonomicGroup> getTaxonomicGroups(String speciesGrouping, String groupNameLocale, String apiToken)
+            throws IOException, InterruptedException, EbirdApiException {
+        String path = "/ref/sppgroup/" + speciesGrouping;
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("groupNameLocale", groupNameLocale);
+        TypeToken<Collection<TaxonomicGroup>> typeToken = new TypeToken<Collection<TaxonomicGroup>>(){};
+        return getApiResponse(path, queryParams, apiToken, typeToken);
+
     }
 }

@@ -13,7 +13,6 @@ import org.junit.Test;
 import com.wheretobird.jebird.Jebird;
 import com.wheretobird.jebird.JebirdTest;
 import com.wheretobird.jebird.exceptions.EbirdApiException;
-import com.wheretobird.jebird.region.SubRegionListItem;
 
 public class SubRegionListTest extends JebirdTest {
 
